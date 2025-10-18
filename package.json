@@ -1,0 +1,15 @@
+{
+  "name": "mern-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["client", "server"],
+  "scripts": {
+    "dev": "concurrently -c green,blue -n server,client \"npm run -w server dev\" \"npm run -w client dev\"",
+    "dev:server": "npm run -w server dev",
+    "dev:client": "npm run -w client dev",
+    "install:all": "npm install --workspaces"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
