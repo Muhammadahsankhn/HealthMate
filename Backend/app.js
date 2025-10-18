@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
+const adminRoutes = require('./routes/admin');
 const seedAdmin = require('./scripts/admin'); // ✅ Import it
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/users', userRoutes);
+app.use('/api', adminRoutes);
 
 // Connect DB and seed admin
 mongoose.connect(process.env.MONGO_URI)

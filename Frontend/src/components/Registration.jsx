@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
+import api from '../utils/api';
 
 
 
@@ -10,8 +11,7 @@ const Registration = () => {
     first_name: '',
     last_name: '',
     email: '',
-    password: '',
-    role: ''
+    password: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -26,20 +26,14 @@ const Registration = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const { data } = await api.post('/users/register', formData);
 
-      const data = await res.json();
-
-      if (res.ok && data.user_id) {
+      if (data && data.user_id) {
         localStorage.setItem('user_id', data.user_id);
         alert('Registration successful! Please fill in your details.');
-        navigate('/detail', { state: { role: formData.role } });
+        navigate('/detail');
       } else {
-        alert(data.error || 'Registration failed');
+        alert((data && data.error) || 'Registration failed');
       }
     } catch (err) {
       alert('Error: ' + err.message);
@@ -96,19 +90,6 @@ const Registration = () => {
           required
           className="mb-4 p-2 border rounded w-[80%]"
         />
-
-        <select
-          name="role"
-          id="role"
-          required
-          value={formData.role || ""}
-          onChange={handleChange}
-          className="w-[80%] p-3 rounded text-black outline-none  mb-4"
-        >
-          <option disabled value="">Select Role</option>
-          <option value="student">Student</option>
-          <option value="teacher">Teacher</option>
-        </select>
 
        
         <Button type="submit" disabled={loading} className='w-[80%]'>{loading ? 'Registering...' : 'Register'}</Button>

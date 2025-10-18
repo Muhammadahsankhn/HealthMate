@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 exports.registerUser = async (req, res) => {
   const { first_name, last_name, email, password, role } = req.body;
 
-  if (!first_name || !last_name || !email || !password || !role) {
+  if (!first_name || !last_name || !email || !password) {
     return res.status(400).json({ error: 'Please fill all fields' });
   }
 
@@ -19,7 +19,7 @@ exports.registerUser = async (req, res) => {
       last_name,
       email,
       password: hashedPassword,
-      role
+      role: role || 'user' // Default to 'user' if no role provided
     });
 
     res.status(201).json({ message: 'User registered', user_id: newUser._id, role: newUser.role });
