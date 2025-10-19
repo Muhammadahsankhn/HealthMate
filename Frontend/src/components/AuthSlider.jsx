@@ -6,11 +6,9 @@ const AuthSlider = () => {
     const [isLogin, setIsLogin] = useState(false);
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-cover bg-center px-4 sm:px-8"
-            style={{
-                backgroundImage:
-                    "url('https://images.saymedia-content.com/.image/t_share/MTkyOTkyMzE2OTQ3MDQ3NjQ1/website-background-templates.png')",
-            }}>
+        <div 
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-400 via-orange-300 to-yellow-400 px-4 sm:px-8"
+            >
             <div className="relative w-[768px] max-w-full h-[500px] overflow-hidden bg-gray-200 rounded-xl shadow-2xl">
 
                 {/* Sliding Forms Container */}

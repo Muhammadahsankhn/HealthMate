@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
-import api from '../utils/api';
+import { AuthContext } from '../context/AuthContext';
 
 
 
 const Registration = () => {
   const navigate = useNavigate();
+  const { register } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -26,14 +27,12 @@ const Registration = () => {
     setLoading(true);
 
     try {
-      const { data } = await api.post('/users/register', formData);
-
-      if (data && data.user_id) {
-        localStorage.setItem('user_id', data.user_id);
-        alert('Registration successful! Please fill in your details.');
-        navigate('/detail');
+      const data = await register(`${formData.first_name} ${formData.last_name}`, formData.email, formData.password);
+      if (data && data.userId) {
+        alert('Registration successful! Please login.');
+        navigate('/auth');
       } else {
-        alert((data && data.error) || 'Registration failed');
+        alert(data.error || 'Registration failed');
       }
     } catch (err) {
       alert('Error: ' + err.message);
@@ -45,10 +44,12 @@ const Registration = () => {
   return (
     <div className="">
       <form
-        onSubmit={handleSubmit}
-        className="bg-transparent  rounded w-1/2 max-w-[20rem] flex flex-col justify-center items-center"
-        autoComplete="off"
-      >
+  onSubmit={handleSubmit}
+  className="bg-gradient-to-br from-pink-500 via-orange-400 to-yellow-300 rounded-xl w-1/2 max-w-[20rem] flex flex-col justify-center items-center p-6 shadow-xl text-white"
+  autoComplete="off"
+>
+
+
         <h1 className="text-3xl font-bold text-center mb-6">Registration</h1>
 
         <input
