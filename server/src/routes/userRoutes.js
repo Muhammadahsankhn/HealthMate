@@ -4,7 +4,7 @@ const { register, login } = require('../controllers/Auth');
 
 
 router.get("/", (req, res) => {
-    res.send("User route is working haha yoyo");
+    res.send("User route is working");
 });
 
 router.post("/register", register);
