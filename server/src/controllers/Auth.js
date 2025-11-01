@@ -22,7 +22,7 @@ exports.register = async (req, res) => {
                     email,
                     password: hash
                 });
-                let token = generateToken(newUser);
+                let token = generateToken(newUser.toObject());
                 return res.status(201).json({
                     success: true,
                     message: 'User registered successfully',
@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
         }
         bcrypt.compare(password, user.password, (err, result) => {
             if (result) {
-                let token = generateToken(user);
+                let token = generateToken(user.toObject());
                 res.status(200).json({
                     success: true,
                     message: 'Login successful',

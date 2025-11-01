@@ -56,7 +56,7 @@ const Auth = ({ onSuccess }) => {
 
         setTimeout(() => {
           window.location.href = "/dashboard";
-        }, 2000);
+        }, 1000);
       } else {
         toast.error(res.data?.message || "Something went wrong!");
       }
@@ -103,6 +103,7 @@ const Auth = ({ onSuccess }) => {
                   onChange={handleChange}
                   placeholder="Enter your name"
                   className="w-full mt-1 px-4 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B9FF66]/60 transition"
+                  required
                 />
               </div>
             )}
@@ -116,6 +117,7 @@ const Auth = ({ onSuccess }) => {
                 onChange={handleChange}
                 placeholder="you@example.com"
                 className="w-full mt-1 px-4 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B9FF66]/60 transition"
+                required
               />
             </div>
 
@@ -128,6 +130,7 @@ const Auth = ({ onSuccess }) => {
                 onChange={handleChange}
                 placeholder="••••••••"
                 className="w-full mt-1 px-4 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B9FF66]/60 transition"
+                required
               />
             </div>
 
