@@ -18,15 +18,32 @@ const AiReview = () => {
   useEffect(() => {
     if (!file) return;
 
+    let messageText = "";
+
+    if (typeof file.aiSummary === "object") {
+      messageText = `
+🩺 **Health Summary**
+
+${file.aiSummary.summary}
+
+📌 **Doctor's Advice:**
+${file.aiSummary.doctorAdvice}
+
+🌐 **Roman Urdu Explanation:**
+${file.aiSummary.romanUrdu}
+    `;
+    } else {
+      messageText = file.aiSummary || "No AI analysis found.";
+    }
+
     setMessages([
       {
         role: "assistant",
-        text:
-          file.aiSummary ||
-          "No AI analysis found for this report. Try uploading again.",
+        text: messageText,
       },
     ]);
   }, [file]);
+
 
   // 💬 Handle Chat with AI
   const handleChat = async () => {
@@ -74,19 +91,17 @@ const AiReview = () => {
           {messages.map((msg, i) => (
             <motion.div
               key={i}
-              className={`flex ${
-                msg.role === "user" ? "justify-end" : "justify-start"
-              }`}
+              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"
+                }`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
               <div
-                className={`max-w-[75%] px-4 py-2 rounded-2xl shadow ${
-                  msg.role === "user"
-                    ? "bg-green-600 text-white rounded-br-none"
-                    : "bg-white text-gray-800 rounded-bl-none"
-                }`}
+                className={`max-w-[75%] px-4 py-2 rounded-2xl shadow ${msg.role === "user"
+                  ? "bg-green-600 text-white rounded-br-none"
+                  : "bg-white text-gray-800 rounded-bl-none"
+                  }`}
               >
                 <div className="flex items-center gap-2">
                   {msg.role === "assistant" ? (

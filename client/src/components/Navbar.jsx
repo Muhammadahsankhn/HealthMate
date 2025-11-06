@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { jwtDecode } from "jwt-decode";
 import { motion, AnimatePresence } from "framer-motion";
@@ -39,7 +40,9 @@ const Navbar = () => {
 
   return (
     <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-md relative">
-      <h1 className="text-2xl font-bold text-[#B9FF66]">AI Doc Analyzer</h1>
+      <Link to="/" className="flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-[#B9FF66]">AI Doc Analyzer</h1>
+      </Link>
 
       <div className="flex gap-6 items-center">
         <a href="/" className="text-gray-700 hover:text-[#B9FF66] transition">

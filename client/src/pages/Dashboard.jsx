@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,7 +11,7 @@ const Dashboard = () => {
   const [reports, setReports] = useState([]);
   const [vitals, setVitals] = useState({
     bloodPressure: "",
-    sugar: "",
+    bloodSugar: "",
     weight: "",
     heartRate: "",
   });
@@ -74,7 +74,7 @@ const Dashboard = () => {
       setFile(null);
       fetchReports(token);
       const uploadedFile = res.data.file; // assuming backend returns file info
-    navigate("/ai-review", { state: { file: uploadedFile } });
+      navigate("/ai-review", { state: { file: uploadedFile } });
     } catch (err) {
       console.error("Upload failed:", err);
       alert("Upload failed!");
@@ -83,32 +83,67 @@ const Dashboard = () => {
     }
   };
 
+
+  // ------------------ Upload Vitals ------------------
+  const handleVitalsUpload = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const API_URL = import.meta.env.VITE_API_URL;
+
+      const res = await axios.post(`${API_URL}/vitals/addVitals`, {
+        bloodPressure: vitals.bloodPressure,
+        bloodSugar: vitals.bloodSugar,
+        weight: vitals.weight,
+        heartRate: vitals.heartRate,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      });
+
+
+      // ✅ Navigate to AI Review page with vitals AI summary
+      const aiSummary = res.data.aiSummary;
+      navigate("/ai-review", {
+        state: { file: { aiSummary, type: "vitals" } },
+      });
+
+      // Reset fields
+      setVitals({
+        bloodPressure: "",
+        sugar: "",
+        weight: "",
+        heartRate: "",
+      });
+    } catch (err) {
+      console.error("Error uploading vitals:", err);
+      alert("Failed to upload vitals!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   // ------------------ Logout ------------------
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
   };
 
-  // ------------------ Save Vitals ------------------
-  const handleVitalsSave = () => {
-    if (!vitals.bloodPressure || !vitals.sugar || !vitals.weight || !vitals.heartRate) {
-      alert("Please fill all vital fields!");
-      return;
-    }
-    alert("Vitals saved successfully ✅ (You can link it with backend later)");
-    setVitals({ bloodPressure: "", sugar: "", weight: "", heartRate: "" });
-  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 flex flex-col">
       {/* Navbar */}
       <nav className="bg-white/80 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <h1
-          onClick={() => setActiveTab("dashboard")}
-          className="text-2xl font-extrabold text-gray-800 cursor-pointer"
-        >
-          🩺 Health<span className="text-green-600">Mate</span>
-        </h1>
+        <Link to="/">
+          <h1 className="text-2xl font-extrabold text-gray-800 cursor-pointer"
+          >
+            🩺 Health<span className="text-green-600">Mate</span>
+          </h1>
+        </Link>
 
         <div
           onClick={() => setShowProfile(true)}
@@ -176,11 +211,10 @@ const Dashboard = () => {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-5 py-2 rounded-full font-medium transition-all ${
-              activeTab === tab
-                ? "bg-green-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            className={`px-5 py-2 rounded-full font-medium transition-all ${activeTab === tab
+              ? "bg-green-600 text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
           >
             {tab === "dashboard" ? "Dashboard" : "View Records"}
           </button>
@@ -229,7 +263,7 @@ const Dashboard = () => {
               whileHover={{ scale: 1.02 }}
             >
               <h3 className="text-xl font-semibold text-gray-800 mb-4">💉 Add Your Vitals</h3>
-              <div className="flex flex-col gap-3">
+              <form onSubmit={handleVitalsUpload} className="flex flex-col gap-3">
                 <input
                   type="text"
                   placeholder="Blood Pressure (e.g. 120/80)"
@@ -240,8 +274,8 @@ const Dashboard = () => {
                 <input
                   type="number"
                   placeholder="Blood Sugar (mg/dL)"
-                  value={vitals.sugar}
-                  onChange={(e) => setVitals({ ...vitals, sugar: e.target.value })}
+                  value={vitals.bloodSugar}
+                  onChange={(e) => setVitals({ ...vitals, bloodSugar: e.target.value })}
                   className="border border-gray-300 rounded-lg p-2"
                 />
                 <input
@@ -258,13 +292,17 @@ const Dashboard = () => {
                   onChange={(e) => setVitals({ ...vitals, heartRate: e.target.value })}
                   className="border border-gray-300 rounded-lg p-2"
                 />
+
+                {/* ✅ This button now submits to backend */}
                 <button
-                  onClick={handleVitalsSave}
+                  type="submit"
+                  disabled={loading}
                   className="bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-all"
                 >
-                  Save Vitals
+                  {loading ? "Saving..." : "Save & Analyze Vitals"}
                 </button>
-              </div>
+              </form>
+
             </motion.div>
           </div>
         </main>

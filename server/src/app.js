@@ -1,7 +1,9 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/userRoutes');
-const fileRoutes = require("./routes/fileRoute");
+const fileRoutes = require("./routes/aiAnalysisRoute");
+const vitalsRoutes = require("./routes/vitalsRoute");
+
 const cors = require('cors');
 
 
@@ -20,5 +22,5 @@ app.use(cookieParser());
 
 app.use('/api/users', userRoutes);
 app.use("/api/files", fileRoutes);
-
+app.use("/api/vitals", vitalsRoutes)
 module.exports = app;

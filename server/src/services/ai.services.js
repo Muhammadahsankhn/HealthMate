@@ -1,5 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from "dotenv";
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const dotenv = require("dotenv");
 dotenv.config();
 
 // 🧠 Initialize Gemini Client
@@ -8,7 +8,7 @@ const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // ===================================================================
 // 🩺 1. Analyze uploaded medical reports (PDF/Image/Text)
 // ===================================================================
-export async function analyzeReport(fileContent, fileType) {
+async function analyzeReport(fileContent, fileType) {
   try {
     let prompt = `
 You are a smart medical assistant. Analyze the following medical report carefully:
@@ -31,13 +31,8 @@ Please return your answer in this exact structure:
       prompt = `This is a general health document. ${prompt}`;
     }
 
-    // Create model instance
     const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
-
-    // Generate AI content
     const response = await model.generateContent(prompt);
-
-    // Extract plain text output
     const textOutput = await response.response.text();
 
     return {
@@ -57,33 +52,87 @@ Please return your answer in this exact structure:
 }
 
 // ===================================================================
-// 💬 2. Chat with AI (based on report + user question)
+// 🩸 2. Analyze Vitals
 // ===================================================================
-export async function chatWithAI(summary, userMessage) {
+async function analyzeVitals(vitals) {
   try {
+    const { bloodPressure, bloodSugar, weight, heartRate } = vitals;
+
+    const prompt = `
+You are a friendly AI health assistant.
+
+User's latest vitals:
+- Blood Pressure: ${bloodPressure}
+- Blood Sugar: ${bloodSugar}
+- Weight: ${weight} kg
+- Heart Rate: ${heartRate} bpm
+
+Please provide a short report in this exact structure:
+1️⃣ **Summary (English):** Explain what these vitals mean.
+2️⃣ **Roman Urdu Suggestion:** Give friendly health tips in Roman Urdu (e.g., "Thoda walk karna start karo aur pani zyada piya karo.")
+3️⃣ **Doctor Advice:** Suggest when the user should consult a doctor.
+`;
+
+    const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const response = await model.generateContent(prompt);
+    const textOutput = await response.response.text();
+
+    return {
+      summary: extractSection(textOutput, "Summary"),
+      romanUrdu: ensureSafetyNote(extractSection(textOutput, "Roman Urdu Suggestion")),
+      doctorAdvice: extractSection(textOutput, "Doctor Advice"),
+      fullResponse: textOutput,
+    };
+  } catch (error) {
+    console.error("Gemini AI (Vitals) error:", error);
+    return {
+      summary: "AI analysis failed.",
+      romanUrdu: "AI report ka tajziya karne mein masla aya hai.",
+      doctorAdvice: "No advice available.",
+    };
+  }
+}
+
+// ===================================================================
+// 💬 3. Chat with AI (based on report + user question)
+// ===================================================================
+async function chatWithAI(aiSummaryObject, userMessage) {
+  try {
+
+    // aiSummaryObject can be from vitals OR report
+    // So we safely extract text from any possible field
+    const summary =
+      aiSummaryObject?.summary ||
+      aiSummaryObject?.romanUrdu ||
+      aiSummaryObject?.doctorAdvice ||
+      aiSummaryObject?.fullResponse ||
+      "No summary available.";
+
     const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = `
 You are a helpful AI medical assistant.
 
-Here is a summary of the user's medical report:
+Here is the patient's health summary:
 ${summary}
 
 User Question:
 "${userMessage}"
 
-Respond clearly and politely in English.
-If advice is medical, include this note:
-"Please consult your doctor for a professional opinion."
+Respond clearly in easy-to-understand English + Roman Urdu.
+Keep it friendly and short.
+If advice sounds medical, end response with:
+"Final confirm doctor se zaroor karain."
 `;
 
     const response = await model.generateContent(prompt);
     return response.response.text();
   } catch (error) {
-    console.error("Gemini chat error:", error);
-    return "I'm sorry, I'm unable to process your question right now.";
+    console.error("Gemini Chat Error:", error);
+    return "Mujhe abhi jawab generate karne me masla horaha hai. Thori dair baad try karein.";
   }
 }
+
 
 // ===================================================================
 // 🧩 Utility functions
@@ -105,3 +154,12 @@ function ensureSafetyNote(text) {
   }
   return text;
 }
+
+// ===================================================================
+// 📦 Export all functions
+// ===================================================================
+module.exports = {
+  analyzeReport,
+  analyzeVitals,
+  chatWithAI,
+};
