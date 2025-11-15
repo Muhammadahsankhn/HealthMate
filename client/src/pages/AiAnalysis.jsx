@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 import { motion } from "framer-motion";
 import { Send, Bot, User } from "lucide-react";
-import axios from "axios";
 import Navbar from "../components/Navbar";
 
 const AiReview = () => {
@@ -46,34 +46,68 @@ ${file.aiSummary.romanUrdu}
 
 
   // 💬 Handle Chat with AI
+  // 💬 Handle Chat with AI
   const handleChat = async () => {
     if (!input.trim() || !file) return;
 
     const userMessage = { role: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
+    setLoading(true);
 
     try {
       const token = localStorage.getItem("token");
-      setLoading(true);
+      console.log('📤 Sending to backend:');
+      console.log('  - File object:', file);
+      console.log('  - File ID:', file._id || file.id);
+      console.log('  - File type:', file.type);
+      console.log('  - Message:', input);
 
+      // Use the API_URL constant defined at the top
       const res = await axios.post(
-        `${API_URL}/files/chat`,
-        { message: input, fileId: file._id },
+        `${API_URL}/chat/chat`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          message: input,
+          id: file._id,
+          source: file.type,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+          // Remove withCredentials if you're using Bearer token auth
+          // withCredentials: true,
         }
       );
 
-      const aiReply = res.data.reply || "Hmm... I couldn’t interpret that.";
+      const aiReply = res.data.reply || "Hmm... I couldn't interpret that.";
       setMessages((prev) => [...prev, { role: "assistant", text: aiReply }]);
+
     } catch (error) {
       console.error("Chat error:", error);
+
+      // Better error handling
+      let errorMessage = "⚠️ Unable to connect to AI at the moment. Try again later.";
+
+      if (error.response) {
+        // Server responded with error
+        console.error("Server error:", error.response.data);
+        errorMessage = error.response.data.message || errorMessage;
+      } else if (error.request) {
+        // Request made but no response
+        console.error("No response received:", error.request);
+        errorMessage = "⚠️ No response from server. Check your connection.";
+      } else {
+        // Something else happened
+        console.error("Error setting up request:", error.message);
+      }
+
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          text: "⚠️ Unable to connect to AI at the moment. Try again later.",
+          text: errorMessage,
         },
       ]);
     } finally {

@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const userRoutes = require('./routes/userRoutes');
 const fileRoutes = require("./routes/aiAnalysisRoute");
 const vitalsRoutes = require("./routes/vitalsRoute");
-
+const chatRoutes = require("./routes/chatRoute");
 const cors = require('cors');
 
 
@@ -23,4 +23,7 @@ app.use(cookieParser());
 app.use('/api/users', userRoutes);
 app.use("/api/files", fileRoutes);
 app.use("/api/vitals", vitalsRoutes)
+app.use("/api/chat", chatRoutes);
+
+
 module.exports = app;

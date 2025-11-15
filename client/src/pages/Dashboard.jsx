@@ -38,15 +38,17 @@ const Dashboard = () => {
   }, [navigate]);
 
   // ------------------ Fetch Reports ------------------
-  const fetchReports = async (token) => {
+  const fetchReports = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/files/uploadReport", {
+      const token = localStorage.getItem("token");
+      const API_URL = import.meta.env.VITE_API_URL;
+      const res = await axios.get(`${API_URL}/files/uploaded`, {
         headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
       });
+
       setReports(res.data.files || []);
     } catch (err) {
-      console.error("Error fetching reports:", err);
+      console.error("Failed to fetch reports:", err);
     }
   };
 
@@ -73,8 +75,10 @@ const Dashboard = () => {
 
       setFile(null);
       fetchReports(token);
-      const uploadedFile = res.data.file; // assuming backend returns file info
-      navigate("/ai-review", { state: { file: uploadedFile } });
+      const uploadedFile = res.data.file; // assuming backend returns file info    
+      navigate(`/c/${uploadedFile._id}`, { state: { file: { ...uploadedFile, type: "report" } } });
+
+
     } catch (err) {
       console.error("Upload failed:", err);
       alert("Upload failed!");
@@ -105,10 +109,21 @@ const Dashboard = () => {
 
 
       // ✅ Navigate to AI Review page with vitals AI summary
-      const aiSummary = res.data.aiSummary;
-      navigate("/ai-review", {
-        state: { file: { aiSummary, type: "vitals" } },
+      // const vitalsRecord = res.data.vitals;
+      // const aiSummary = res.data.aiSummary;
+      const id = res.data.data._id;
+
+      navigate(`/c/${id}`, {
+        state: {
+          file: {
+            ...res.data.data,        // ✅ includes _id
+            type: "vitals",          // ✅ tells AiReview it's vitals
+            aiSummary: res.data.aiSummary // ✅ send summary along
+          }
+        }
       });
+
+
 
       // Reset fields
       setVitals({
@@ -324,10 +339,10 @@ const Dashboard = () => {
                 >
                   <h4 className="font-semibold text-gray-800 truncate">{report.filename}</h4>
                   <p className="text-gray-500 text-sm mt-2">
-                    Uploaded on {new Date(report.createdAt).toLocaleDateString()}
+                    Uploaded on {new Date(report.uploadDate).toLocaleDateString()}
                   </p>
                   <a
-                    href={`http://localhost:5000/uploads/${report.filename}`}
+                    href={`${report.fileUrl}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"

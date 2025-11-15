@@ -7,31 +7,24 @@ const Hero = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  // Check for token on mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
         setUser(decoded);
-      } catch (err) {
-        console.error("Invalid token", err);
+      } catch {
         localStorage.removeItem("token");
       }
     }
   }, []);
 
-  // Handle button click
-  const handleUploadClick = () => {
-    if (user) {
-      navigate("/dashboard");
-    } else {
-      navigate("/auth");
-    }
+  const handleClick = () => {
+    navigate(user ? "/dashboard" : "/auth");
   };
 
   return (
-    <section className="flex flex-col lg:flex-row items-center justify-between px-8 lg:px-16 py-16 bg-gray-50">
+    <section className="flex flex-col lg:flex-row items-center justify-between px-8 lg:px-20 py-20 bg-gradient-to-br from-green-50 via-white to-[#e8ffe6]">
       <motion.div
         initial={{ opacity: 0, y: 70 }}
         animate={{ opacity: 1, y: 0 }}
@@ -39,27 +32,27 @@ const Hero = () => {
         className="max-w-xl"
       >
         <h1 className="text-5xl font-bold leading-tight text-gray-900">
-          Analyze Your Documents with{" "}
-          <span className="text-[#B9FF66]">AI</span>
+          Your Personal <span className="text-[#4ade80]">AI Health Companion</span>
         </h1>
-        <p className="text-gray-600 mt-4 text-lg">
-          Upload PDFs, Reports, or Research Papers — get instant insights,
-          summaries, and smart analysis powered by AI.
+        <p className="text-gray-600 mt-5 text-lg">
+          Upload your <strong>medical reports</strong>, and let HealthMate’s AI
+          analyze them — giving you a quick summary, insights, and
+          recommendations in <strong>plain, simple language</strong>.
         </p>
 
         <button
-          onClick={handleUploadClick}
-          className="mt-6 bg-[#B9FF66] text-black px-6 py-3 rounded-xl font-semibold hover:scale-105 transition"
+          onClick={handleClick}
+          className="mt-8 bg-[#B9FF66] text-black px-8 py-3 rounded-xl font-semibold hover:bg-[#A4FF44] hover:scale-105 transition"
         >
-          Upload Document
+          Get Your Health Insights
         </button>
       </motion.div>
 
       <motion.img
-        src="https://cdn-icons-png.flaticon.com/512/4727/4727260.png"
-        alt="AI Analysis"
-        className="w-80 mt-10 lg:mt-0"
-        initial={{ opacity: 0, scale: 0.8 }}
+        src="https://delivix.digital/wp-content/uploads/2024/12/455_the_role_of_AI_in_healthcare.webp"
+        alt="AI Health Analysis"
+        className="w-80 mt-12 lg:mt-0 drop-shadow-lg"
+        initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8 }}
       />

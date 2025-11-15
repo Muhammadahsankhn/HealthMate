@@ -75,7 +75,7 @@ Please provide a short report in this exact structure:
 
     const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     const response = await model.generateContent(prompt);
-    const textOutput = await response.response.text();
+    const textOutput =  response.response.text();
 
     return {
       summary: extractSection(textOutput, "Summary"),
@@ -98,14 +98,11 @@ Please provide a short report in this exact structure:
 // ===================================================================
 async function chatWithAI(aiSummaryObject, userMessage) {
   try {
-
-    // aiSummaryObject can be from vitals OR report
-    // So we safely extract text from any possible field
     const summary =
-      aiSummaryObject?.summary ||
-      aiSummaryObject?.romanUrdu ||
-      aiSummaryObject?.doctorAdvice ||
-      aiSummaryObject?.fullResponse ||
+      aiSummaryObject?.aiSummary ||
+      aiSummaryObject?.aiRomanUrdu ||
+      aiSummaryObject?.aiDoctorQuestions ||
+      aiSummaryObject ||
       "No summary available.";
 
     const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -113,23 +110,23 @@ async function chatWithAI(aiSummaryObject, userMessage) {
     const prompt = `
 You are a helpful AI medical assistant.
 
-Here is the patient's health summary:
+Patient's Health Summary:
 ${summary}
 
 User Question:
 "${userMessage}"
 
-Respond clearly in easy-to-understand English + Roman Urdu.
-Keep it friendly and short.
-If advice sounds medical, end response with:
+Respond clearly in a friendly tone, mixing simple English & Roman Urdu.
+If giving medical advice, end message with:
 "Final confirm doctor se zaroor karain."
 `;
 
-    const response = await model.generateContent(prompt);
-    return response.response.text();
+    const result = await model.generateContent(prompt);
+    // Change this line in chatWithAI function:
+   return result.response.text();
   } catch (error) {
     console.error("Gemini Chat Error:", error);
-    return "Mujhe abhi jawab generate karne me masla horaha hai. Thori dair baad try karein.";
+    return "Mujhe abhi jawab generate karne mein masla horaha hai. Thori dair baad try karein.";
   }
 }
 

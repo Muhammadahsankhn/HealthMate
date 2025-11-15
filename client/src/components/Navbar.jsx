@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 const Navbar = () => {
   const [user, setUser] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
+  const [showRecordsDropdown, setShowRecordsDropdown] = useState(false);
+  const [showUploadDropdown, setShowUploadDropdown] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,36 +27,99 @@ const Navbar = () => {
     }
   }, []);
 
-  // 👤 Toggle Profile Drawer
   const handleProfileClick = () => {
     setShowProfile((prev) => !prev);
   };
 
-  // 🚪 Logout Function
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
     setShowProfile(false);
-    window.location.href = "/"; // redirect to home
+    window.location.href = "/";
   };
 
   return (
     <nav className="flex justify-between items-center py-4 px-8 bg-white shadow-md relative">
       <Link to="/" className="flex items-center gap-2">
-        <h1 className="text-2xl font-bold text-[#B9FF66]">AI Doc Analyzer</h1>
+        <h1 className="text-2xl font-bold text-[#B9FF66]">HealthMate</h1>
       </Link>
 
-      <div className="flex gap-6 items-center">
-        <a href="/" className="text-gray-700 hover:text-[#B9FF66] transition">
+      <div className="flex gap-6 items-center relative">
+        <Link to="/" className="text-gray-700 hover:text-[#B9FF66] transition">
           Home
-        </a>
-        <a href="#features" className="text-gray-700 hover:text-[#B9FF66] transition">
-          Features
-        </a>
-        <a href="/dashboard" className="text-gray-700 hover:text-[#B9FF66] transition">
-          Upload
-        </a>
+        </Link>
 
+        {/* Records Dropdown */}
+        <div
+          className="relative"
+          onMouseEnter={() => setShowRecordsDropdown(true)}
+          onMouseLeave={() => setShowRecordsDropdown(false)}
+        >
+          <button className="text-gray-700 hover:text-[#B9FF66] transition flex items-center gap-1">
+            Records
+          </button>
+
+          <AnimatePresence>
+            {showRecordsDropdown && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute bg-white shadow-md rounded-xl mt-2 py-2 w-48 z-50 border border-gray-100"
+              >
+                <Link
+                  to="/vitals-record"
+                  className="block px-4 py-2 text-gray-700 hover:bg-[#B9FF66]/20"
+                >
+                  Vitals Record
+                </Link>
+                <Link
+                  to="/report-record"
+                  className="block px-4 py-2 text-gray-700 hover:bg-[#B9FF66]/20"
+                >
+                  Report Record
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Upload Dropdown */}
+        <div
+          className="relative"
+          onMouseEnter={() => setShowUploadDropdown(true)}
+          onMouseLeave={() => setShowUploadDropdown(false)}
+        >
+          <button className="text-gray-700 hover:text-[#B9FF66] transition flex items-center gap-1">
+            Upload
+          </button>
+
+          <AnimatePresence>
+            {showUploadDropdown && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute bg-white shadow-md rounded-xl mt-2 py-2 w-48 z-50 border border-gray-100"
+              >
+                <Link
+                  to="/vitals-upload"
+                  className="block px-4 py-2 text-gray-700 hover:bg-[#B9FF66]/20"
+                >
+                  Vitals Upload
+                </Link>
+                <Link
+                  to="/report-upload"
+                  className="block px-4 py-2 text-gray-700 hover:bg-[#B9FF66]/20"
+                >
+                  Report Upload
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Profile or Login */}
         {user ? (
           <>
             <div className="flex items-center gap-2">
@@ -66,7 +131,6 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* 🧾 Animated Profile Drawer */}
             <AnimatePresence>
               {showProfile && (
                 <>

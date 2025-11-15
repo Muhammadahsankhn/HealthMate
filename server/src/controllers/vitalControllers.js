@@ -16,7 +16,7 @@ exports.addVitals = async (req, res) => {
     }
 
     // 🩺 Save vitals to MongoDB
-    const newVital = Vital.create({
+    const newVital = await Vital.create({
       userId: req.user._id,
       bloodPressure,
       bloodSugar,
@@ -44,3 +44,30 @@ exports.addVitals = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+
+exports.getVitalsById = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const vital = await Vital.find({ userId: userId }).sort({ createdAt: -1 });
+
+    if (!vital) {
+      return res.status(404).json({
+        message: "Vital record not found"
+      });
+    }
+
+    res.status(200).json({ data: vital });
+
+  } catch (error) {
+
+    console.error("Error fetching vitals:", error);
+    res.status(500).json({
+      message: "Server error",
+      error: error.message
+    });
+
+  }
+};
+

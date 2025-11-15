@@ -4,6 +4,13 @@ import Home from './pages/Home';
 import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 import AiAnalysis from './pages/AiAnalysis';
+import VitalsUpload from "./pages/VitalsUpload";
+import ReportUpload from "./pages/ReportUpload";
+import VitalsRecord from "./pages/VitalsRecord";
+import ReportRecord from "./pages/ReportRecord";
+import Layout from './components/layoutes/layoutes';
+
+
 
 function App() {
   return (
@@ -12,7 +19,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/ai-review" element={<AiAnalysis />} />
+        <Route path="/c/:_id" element={<AiAnalysis />} />
+        <Route path="/vitals-upload" element={<Layout><VitalsUpload /></Layout>} />
+        <Route path="/report-upload" element={<Layout><ReportUpload /></Layout>} />
+        <Route path="/vitals-record" element={<Layout><VitalsRecord /></Layout>} />
+        <Route path="/report-record" element={<Layout><ReportRecord /></Layout>} />
       </Routes>
     </BrowserRouter>
   );

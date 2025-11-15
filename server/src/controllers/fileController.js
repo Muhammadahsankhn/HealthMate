@@ -44,7 +44,7 @@ exports.uploadReport = async (req, res) => {
     if (req.file.mimetype.includes("pdf")) {
       const dataBuffer = fs.readFileSync(req.file.path);
       console.log(req.file.path);
-      
+
       const pdfData = await pdfParse(dataBuffer);
       fileContent = pdfData.text;
     } else if (req.file.mimetype.includes("image")) {
@@ -79,44 +79,22 @@ exports.uploadReport = async (req, res) => {
   }
 };
 
-// ===============================
-// 💬 Chat with AI based on report
-// ===============================
-exports.chatWithAIResponse = async (req, res) => {
+
+
+exports.getFile = async (req, res) => {
   try {
-    const { message, fileId } = req.body;
+    const userId = req.user._id;
 
-    if (!message) {
-      return res.status(400).json({ message: "Message is required" });
+    // Find all files uploaded by this user
+    const files = await File.find({ userId: userId }).sort({ createdAt: -1 });
+
+    if (!files || files.length === 0) {
+      return res.status(404).json({ message: "No files found for this user" });
     }
 
-    // ✅ Fetch the file’s previous AI summary to give context
-    const file = await File.findById(fileId);
-    if (!file) {
-      return res.status(404).json({ message: "File not found" });
-    }
-
-    const context = `
-    The user previously uploaded a medical report analyzed as:
-    "${file.aiSummary}"
-    Now the user says: "${message}"
-
-    Reply as a helpful AI health assistant. Use clear, simple English and Roman Urdu mix if needed.
-    Always end with this note:
-    "Ye report Gemini ne analyze ki hai, lekin final tasdeeq ke liye apne doctor se zaroor mashwara karein."
-    `;
-
-    // 🧠 Send message to AI model
-    const aiResult = await analyzeReport(context, "text");
-
-    res.status(200).json({
-      reply: aiResult.romanUrdu || aiResult.summary || "No AI reply generated.",
-    });
+    res.status(200).json({ files });
   } catch (error) {
-    console.error("Chat error:", error);
-    res.status(500).json({
-      message: "AI chat error",
-      error: error.message,
-    });
+    console.error("Error fetching files:", error);
+    res.status(500).json({ message: "Server error fetching files" });
   }
 };

@@ -1,10 +1,12 @@
+// src/components/Footer.jsx
 import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="text-center py-6 bg-gray-50 border-t">
-      <p className="text-gray-600">
-        © {new Date().getFullYear()} <span className="text-[#B9FF66] font-semibold">AI Doc Analyzer</span>. All rights reserved.
+    <footer className="mt-auto py-6 bg-white shadow-inner rounded-t-2xl text-center">
+      <p className="text-gray-600 text-sm">
+        © {new Date().getFullYear()} <span className="font-semibold text-green-600">HealthMate</span> — Designed by{" "}
+        <span className="font-semibold text-[#B9FF66]">Ahsan 💚</span>
       </p>
     </footer>
   );
