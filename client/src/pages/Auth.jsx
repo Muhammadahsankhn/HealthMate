@@ -27,27 +27,6 @@ const Auth = ({ onSuccess }) => {
       });
 
 
-      // // ✅ Backend now returns { success, message, token, user }
-      // if (res.data?.success) {
-      //   // ✅ Show success toast
-      //   toast.success(res.data.message || (isLogin ? "Login successful 🎉" : "Registered successfully 🎉"));
-
-      //   // ✅ Save token only
-      //   localStorage.setItem("token", res.data.token);
-
-      //   // ✅ Optional callback
-      //   if (onSuccess) onSuccess(res.data.user);
-
-      //   // ✅ Reset fields
-      //   setFormData({ username: "", email: "", password: "" });
-
-      //   // ✅ Redirect after short delay (so toast is visible)
-      //   setTimeout(() => {
-      //     window.location.href = "/dashboard";
-      //   }, 2000);
-      // } else {
-      //   toast.error(res.data?.message || "Something went wrong!");
-      // }
       if (res.status === 200 || res.status === 201) {
         toast.success(res.data.message || (isLogin ? "Login successful 🎉" : "Registered successfully 🎉"));
         localStorage.setItem("token", res.data.token);
@@ -55,7 +34,7 @@ const Auth = ({ onSuccess }) => {
         setFormData({ username: "", email: "", password: "" });
 
         setTimeout(() => {
-          window.location.href = "/dashboard";
+          window.location.href = "/";
         }, 1000);
       } else {
         toast.error(res.data?.message || "Something went wrong!");

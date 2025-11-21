@@ -20,7 +20,7 @@ const Hero = () => {
   }, []);
 
   const handleClick = () => {
-    navigate(user ? "/dashboard" : "/auth");
+    navigate(user ? "/" : "/auth");
   };
 
   return (

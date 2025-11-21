@@ -22,6 +22,7 @@ exports.addVitals = async (req, res) => {
       bloodSugar,
       weight,
       heartRate,
+      aiAnalysis,
     });
 
 
@@ -31,6 +32,7 @@ exports.addVitals = async (req, res) => {
       bloodSugar,
       weight,
       heartRate,
+      aiAnalysis
     });
 
     // ✅ Send response
