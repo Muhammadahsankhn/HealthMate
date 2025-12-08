@@ -43,7 +43,7 @@ exports.uploadReport = async (req, res) => {
     let fileContent = "";
     if (req.file.mimetype.includes("pdf")) {
       const dataBuffer = fs.readFileSync(req.file.path);
-      console.log(req.file.path);
+      // console.log(req.file.path);
 
       const pdfData = await pdfParse(dataBuffer);
       fileContent = pdfData.text;

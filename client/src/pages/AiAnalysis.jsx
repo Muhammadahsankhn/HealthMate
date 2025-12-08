@@ -57,11 +57,6 @@ ${file.aiSummary.romanUrdu}
 
     try {
       const token = localStorage.getItem("token");
-      console.log('📤 Sending to backend:');
-      console.log('  - File object:', file);
-      console.log('  - File ID:', file._id || file.id);
-      console.log('  - File type:', file.type);
-      console.log('  - Message:', input);
 
       // Use the API_URL constant defined at the top
       const res = await axios.post(

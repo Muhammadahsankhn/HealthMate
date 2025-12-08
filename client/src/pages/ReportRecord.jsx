@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 
@@ -28,23 +29,25 @@ const ReportRecord = () => {
         {reports.length > 0 ? (
           reports.map((report) => (
             <motion.div
-              key={report._id}
-              className="bg-white shadow-lg rounded-2xl p-5 hover:shadow-2xl transition"
-              whileHover={{ scale: 1.02 }}
-            >
-              <h4 className="font-semibold text-gray-800 truncate">{report.fileName}</h4>
-              <p className="text-gray-500 text-sm mt-2">
-                Uploaded on {new Date(report.uploadDate).toLocaleDateString()}
-              </p>
-              <a
-                href={report.fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                key={report._id}
+                className="bg-white shadow-lg rounded-2xl p-5 hover:shadow-2xl transition"
+                whileHover={{ scale: 1.02 }}
               >
-                View Report
-              </a>
-            </motion.div>
+            <Link to={`/c/${report._id}`} key={report._id}>
+                <h4 className="font-semibold text-gray-800 truncate">{report.fileName}</h4>
+                <p className="text-gray-500 text-sm mt-2">
+                  Uploaded on {new Date(report.uploadDate).toLocaleDateString()}
+                </p>
+                </Link>
+                <a
+                  href={report.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition"
+                >
+                  View Report
+                </a>
+              </motion.div>
           ))
         ) : (
           <p className="text-gray-500 text-center col-span-full">

@@ -60,7 +60,7 @@ const ReportUpload = () => {
           whileHover={{ scale: 1.01 }}
         >
           <div className="flex items-center gap-3 bg-white/60 backdrop-blur-xl px-4 py-4 rounded-xl border border-gray-200 shadow-sm">
-            <FileUp className="text-blue-600" size={22} />
+            <FileUp className="text-green-600" size={22} />
 
             <input
               type="file"
@@ -72,7 +72,7 @@ const ReportUpload = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:bg-blue-700 transition-all"
+            className="bg-green-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:bg-green-700 transition-all"
           >
             {loading ? "Uploading..." : "Upload Report"}
           </button>

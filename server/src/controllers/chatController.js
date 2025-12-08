@@ -18,7 +18,7 @@ exports.chat = async (req, res) => {
     const reply = await chatWithAI(aiSummaryObject, message);
     return res.json({ reply });
   } catch (error) {
-    console.log("Chat error:", error);
+    // console.log("Chat error:", error);
     return res.status(500).json({ msg: "Server error" });
   }
 };
