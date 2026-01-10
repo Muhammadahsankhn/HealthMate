@@ -28,8 +28,8 @@ function App() {
         <Route path='/about' element={<About />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/features' element={<Features />} />
-        <Route path="/vitals-upload" element={<Layout><VitalsUpload /></Layout>} />
-        <Route path="/report-upload" element={<Layout><ReportUpload /></Layout>} />
+        <Route path="/upload-vitals" element={<Layout><VitalsUpload /></Layout>} />
+        <Route path="/upload-report" element={<Layout><ReportUpload /></Layout>} />
         <Route path="/vitals-record" element={<Layout><VitalsRecord /></Layout>} />
         <Route path="/report-record" element={<Layout><ReportRecord /></Layout>} />
       </Routes>
