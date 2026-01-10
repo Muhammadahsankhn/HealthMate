@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { Send, Bot, User } from "lucide-react";
-import Navbar from "../components/Navbar";
 
 const AiReview = () => {
   const { state } = useLocation();
@@ -112,7 +111,6 @@ ${file.aiSummary.romanUrdu}
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-50 via-white to-green-100">
-      <Navbar />
 
       {/* Chat Section */}
       <main className="flex-1 p-6 relative ">

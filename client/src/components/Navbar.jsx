@@ -53,10 +53,7 @@ const Navbar = () => {
         <div className="hidden md:flex gap-8 items-center font-medium text-sm text-gray-600">
           <Link to="/" className="hover:text-green-600 transition">Home</Link>
           <Link to="/about" className="hover:text-green-600 transition">About</Link>
-
-          {user && (
-            <>
-              <Link to="/dashboard" className="hover:text-green-600 transition">Dashboard</Link>
+<Link to="/dashboard" className="hover:text-green-600 transition">Dashboard</Link>
               <Link to="/medications" className="hover:text-green-600 transition">Meds</Link>
               
               <div 
@@ -79,8 +76,7 @@ const Navbar = () => {
                   )}
                 </AnimatePresence>
               </div>
-            </>
-          )}
+          
         </div>
 
         {/* --- Desktop Profile Actions --- */}
@@ -158,8 +154,6 @@ const Navbar = () => {
             <Link to="/" className="text-lg font-medium p-4 hover:bg-gray-50 rounded-xl">Home</Link>
             <Link to="/about" className="text-lg font-medium p-4 hover:bg-gray-50 rounded-xl">About</Link>
             
-            {user && (
-              <>
                 <div className="h-px bg-gray-100 my-2" />
                 <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-2">Features</p>
                 <Link to="/dashboard" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
@@ -174,6 +168,8 @@ const Navbar = () => {
                 <Link to="/upload-vitals" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
                   <HeartPulse size={20} /> Log Vitals
                 </Link>
+            {user && (
+              <>
                 
                 <div className="h-px bg-gray-100 my-4" />
                 <button onClick={handleLogout} className="flex items-center gap-3 text-lg font-medium p-4 text-red-500 hover:bg-red-50 rounded-xl w-full text-left">
