@@ -15,6 +15,15 @@ exports.addVitals = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // 🤖 Generate AI summary
+    const aiResponse = await analyzeVitals({
+      bloodPressure,
+      bloodSugar,
+      weight,
+      heartRate,
+    });
+
+
     // 🩺 Save vitals to MongoDB
     const newVital = await Vital.create({
       userId: req.user._id,
@@ -22,18 +31,12 @@ exports.addVitals = async (req, res) => {
       bloodSugar,
       weight,
       heartRate,
-      aiAnalysis,
+      aiSummary: aiResponse.summary,
+      aiRomanUrdu: aiResponse.romanUrdu,
+      aiDoctorAdvice: aiResponse.doctorAdvice,
     });
 
 
-    // 🤖 Generate AI summary
-    const aiResponse = await analyzeVitals({
-      bloodPressure,
-      bloodSugar,
-      weight,
-      heartRate,
-      aiAnalysis
-    });
 
     // ✅ Send response
     res.status(201).json({
