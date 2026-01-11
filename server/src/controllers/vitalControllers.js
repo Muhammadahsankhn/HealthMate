@@ -1,21 +1,20 @@
-const Vital = require("../models/vitalModel"); // ✅ Import your Mongoose model
-const { analyzeVitals } = require("../services/ai.services"); // ✅ Import AI service
+const Vital = require("../models/vitalModel");
+const { analyzeVitals } = require("../services/ai.services");
 
+// 1. ADD VITALS
 exports.addVitals = async (req, res) => {
   try {
     const { bloodPressure, bloodSugar, weight, heartRate } = req.body;
 
-    // 🔒 Authentication check
     if (!req.user || !req.user._id) {
       return res.status(401).json({ message: "User not authenticated" });
     }
 
-    // ⚙️ Validation
     if (!bloodPressure || !bloodSugar || !weight || !heartRate) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // 🤖 Generate AI summary
+    // AI Analysis
     const aiResponse = await analyzeVitals({
       bloodPressure,
       bloodSugar,
@@ -23,8 +22,7 @@ exports.addVitals = async (req, res) => {
       heartRate,
     });
 
-
-    // 🩺 Save vitals to MongoDB
+    // Save to DB
     const newVital = await Vital.create({
       userId: req.user._id,
       bloodPressure,
@@ -36,9 +34,6 @@ exports.addVitals = async (req, res) => {
       aiDoctorAdvice: aiResponse.doctorAdvice,
     });
 
-
-
-    // ✅ Send response
     res.status(201).json({
       message: "Vitals added successfully",
       data: newVital,
@@ -50,29 +45,33 @@ exports.addVitals = async (req, res) => {
   }
 };
 
-
-
-exports.getVitalsById = async (req, res) => {
+// 2. GET USER VITALS (History List)
+exports.getUserVitals = async (req, res) => {
   try {
     const userId = req.user._id;
-    const vital = await Vital.find({ userId: userId }).sort({ createdAt: -1 });
-
-    if (!vital) {
-      return res.status(404).json({
-        message: "Vital record not found"
-      });
-    }
-
-    res.status(200).json({ data: vital });
-
+    const vitals = await Vital.find({ userId: userId }).sort({ createdAt: -1 });
+    res.status(200).json({ data: vitals });
   } catch (error) {
-
     console.error("Error fetching vitals:", error);
-    res.status(500).json({
-      message: "Server error",
-      error: error.message
-    });
-
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
+// 3. GET SINGLE VITAL (For Chat)
+exports.getVitalById = async (req, res) => {
+  try {
+    const vital = await Vital.findOne({ 
+        _id: req.params.id, 
+        userId: req.user._id 
+    });
+
+    if (!vital) {
+      return res.status(404).json({ message: "Vital record not found" });
+    }
+
+    res.json({ data: vital });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

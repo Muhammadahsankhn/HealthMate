@@ -4,22 +4,40 @@ const { chatWithAI } = require("../services/ai.services");
 
 exports.chat = async (req, res) => {
   try {
-    const { message, id, source } = req.body; // source should be "vitals" or "report"
+    const { message, id, source } = req.body; 
 
-    let aiSummaryObject = null;
-
+    // 1. Find the document (File or Vitals)
+    let document = null;
     if (source === "vitals") {
-        aiSummaryObject = await Vitals.findById(id);
+        document = await Vitals.findById(id);
     } else {
-        // Default to File search if source isn't vitals
-        aiSummaryObject = await File.findById(id);
+        document = await File.findById(id);
     }
 
-    if (!aiSummaryObject) {
+    if (!document) {
       return res.status(404).json({ msg: "Record not found" });
     }
 
-    const reply = await chatWithAI(aiSummaryObject, message);
+    // 2. Get AI Response
+    const reply = await chatWithAI(document, message);
+
+  
+    // Push User's Message
+    document.chatHistory.push({
+        sender: "user",
+        message: message
+    });
+
+    // Push AI's Reply
+    document.chatHistory.push({
+        sender: "ai",
+        message: reply
+    });
+
+    // Save the document!
+    await document.save();
+    // ---------------------------------------------------------
+
     return res.json({ reply });
     
   } catch (error) {

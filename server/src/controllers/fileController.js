@@ -98,3 +98,27 @@ exports.getFile = async (req, res) => {
     res.status(500).json({ message: "Server error fetching files" });
   }
 };
+
+
+
+// ... existing uploadReport and getFile ...
+
+//  GET SINGLE FILE BY ID (For Analysis Page)
+exports.getFileById = async (req, res) => {
+  try {
+    // Find the file AND ensure it belongs to the logged-in user
+    const file = await File.findOne({ 
+        _id: req.params.id, 
+        userId: req.user._id 
+    });
+
+    if (!file) {
+      return res.status(404).json({ message: "Report not found or unauthorized" });
+    }
+
+    res.status(200).json({ data: file });
+  } catch (error) {
+    console.error("Error fetching single file:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

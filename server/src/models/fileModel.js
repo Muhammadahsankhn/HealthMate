@@ -9,6 +9,15 @@ const fileSchema = new mongoose.Schema({
     aiRomanUrdu: String,
     aiDoctorQuestions: String,
     uploadDate: { type: Date, default: Date.now },
+
+
+    chatHistory: [
+        {
+            sender: { type: String, enum: ["user", "ai"], required: true },
+            message: { type: String, required: true },
+            timestamp: { type: Date, default: Date.now }
+        }
+    ],
 });
 
 module.exports = mongoose.model("File", fileSchema);

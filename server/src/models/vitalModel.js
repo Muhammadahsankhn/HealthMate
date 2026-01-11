@@ -7,8 +7,24 @@ const vitalSchema = new mongoose.Schema({
     bloodSugar: { type: Number, required: true },
     weight: { type: Number, required: true },
     heartRate: { type: Number, required: true },
+
     createdAt: { type: Date, default: Date.now },
-    aiAnalysis: { type: String }
+
+
+    aiSummary: { type: String },
+    aiRomanUrdu: { type: String },
+    aiDoctorAdvice: { type: String },
+
+    fullAnalysis: { type: String },
+
+
+    chatHistory: [
+        {
+            sender: { type: String, enum: ["user", "ai"], required: true },
+            message: { type: String, required: true },
+            timestamp: { type: Date, default: Date.now }
+        }
+    ],
 });
 
 module.exports = mongoose.model('Vital', vitalSchema);
