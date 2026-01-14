@@ -159,9 +159,6 @@ const Navbar = () => {
                 <Link to="/dashboard" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
                   <LayoutDashboard size={20} /> Dashboard
                 </Link>
-                <Link to="/medications" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
-                  <Pill size={20} /> Medications
-                </Link>
                 <Link to="/upload-report" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
                   <FileText size={20} /> Upload Report
                 </Link>
