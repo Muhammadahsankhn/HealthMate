@@ -1,4 +1,4 @@
-HealthMate: Your Digital Medical Record & AI Assistant
+**HealthMate:** Your Digital Medical Record & AI Assistant
 HealthMate is a MERN Stack application designed to solve the chaos of managing physical medical records. It provides a secure, digital home for medical reports and uses Google's Gemini AI to make them easy to understand for everyone.
 
 
