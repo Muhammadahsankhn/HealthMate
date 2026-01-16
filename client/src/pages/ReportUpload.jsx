@@ -9,7 +9,7 @@ const ReportUpload = () => {
   const [loading, setLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState("");
-  
+
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
@@ -49,7 +49,7 @@ const ReportUpload = () => {
   // Validate File Type (Optional but recommended)
   const validateAndSetFile = (file) => {
     if (!file) return;
-    
+
     // Check file type (example: images and pdfs only)
     const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
     if (!validTypes.includes(file.type)) {
@@ -84,24 +84,29 @@ const ReportUpload = () => {
       });
 
       const uploadedFile = res.data.file;
-      
+
       // Delay navigation slightly to show success state
       setTimeout(() => {
         navigate(`/c/${uploadedFile._id}`, {
-            state: { file: { ...uploadedFile, type: "report" } },
+          state: { file: { ...uploadedFile, type: "report" } },
         });
       }, 1000);
 
     } catch (err) {
       console.error("Upload failed:", err);
-      setError("Upload failed. Please check your connection.");
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message)
+      } else {
+        setError("Upload failed. Please check your connection.");
+      }
+
       setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 via-white to-blue-50 p-6 font-sans">
-      
+
       {/* Decorative background blobs */}
       <div className="absolute top-20 left-20 w-72 h-72 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
       <div className="absolute bottom-20 right-20 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -120,7 +125,7 @@ const ReportUpload = () => {
         </div>
 
         <form onSubmit={handleUpload} className="flex flex-col gap-6">
-          
+
           {/* DRAG & DROP AREA */}
           <div
             onClick={() => fileInputRef.current.click()}
@@ -129,8 +134,8 @@ const ReportUpload = () => {
             onDrop={onDrop}
             className={`
               relative group cursor-pointer border-2 border-dashed rounded-2xl p-10 transition-all duration-300 flex flex-col items-center justify-center text-center
-              ${isDragging 
-                ? "border-green-500 bg-green-50 scale-[1.02]" 
+              ${isDragging
+                ? "border-green-500 bg-green-50 scale-[1.02]"
                 : "border-gray-300 hover:border-green-400 hover:bg-gray-50"
               }
               ${file ? "border-green-500 bg-green-50/30" : ""}
@@ -171,7 +176,7 @@ const ReportUpload = () => {
                   </div>
                   <p className="text-gray-800 font-semibold truncate max-w-[200px]">{file.name}</p>
                   <p className="text-gray-500 text-xs mt-1">{formatFileSize(file.size)}</p>
-                  
+
                   {/* Remove Button */}
                   <button
                     type="button"
@@ -190,7 +195,7 @@ const ReportUpload = () => {
 
           {/* Error Message */}
           {error && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="flex items-center gap-2 text-red-600 bg-red-50 p-3 rounded-lg text-sm"
@@ -206,7 +211,7 @@ const ReportUpload = () => {
             className={`
               w-full py-4 rounded-xl font-bold text-lg shadow-lg flex items-center justify-center gap-2 transition-all transform
               ${!file || loading
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed" 
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-gradient-to-r from-green-500 to-teal-600 text-white hover:scale-[1.02] hover:shadow-green-500/30"
               }
             `}

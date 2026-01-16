@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { Menu, X, ChevronDown, User, LogOut, FileText, Pill, LayoutDashboard, HeartPulse } from "lucide-react";
+import { Menu, X, ChevronDown, Upload, LogOut, FileText, Pill, LayoutDashboard, HeartPulse } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
@@ -20,7 +20,7 @@ const Navbar = () => {
         const decoded = jwtDecode(token);
         setUser(decoded);
       } catch (error) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("token",error);
       }
     }
   }, []);
@@ -40,7 +40,7 @@ const Navbar = () => {
   return (
     <>
       <nav className="flex justify-between items-center py-4 px-6 md:px-10 bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50">
-        
+
         {/* --- Logo --- */}
         <Link to="/" className="flex items-center gap-2 group z-50">
           <div className="w-8 h-8 bg-green-100 text-green-600 rounded-lg flex items-center justify-center font-bold text-xl group-hover:bg-green-600 group-hover:text-white transition">H</div>
@@ -53,30 +53,29 @@ const Navbar = () => {
         <div className="hidden md:flex gap-8 items-center font-medium text-sm text-gray-600">
           <Link to="/" className="hover:text-green-600 transition">Home</Link>
           <Link to="/about" className="hover:text-green-600 transition">About</Link>
-<Link to="/dashboard" className="hover:text-green-600 transition">Dashboard</Link>
-              <Link to="/medications" className="hover:text-green-600 transition">Meds</Link>
-              
-              <div 
-                className="relative"
-                onMouseEnter={() => setActiveDropdown("upload")}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                <button className="flex items-center gap-1 hover:text-green-600 transition py-4">
-                  Upload <ChevronDown size={14} />
-                </button>
-                <AnimatePresence>
-                  {activeDropdown === "upload" && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-                      className="absolute top-full left-0 bg-white shadow-xl rounded-xl border border-gray-100 p-2 w-48 overflow-hidden"
-                    >
-                      <Link to="/upload-report" className="block px-4 py-2 hover:bg-green-50 text-gray-700 rounded-lg">Upload Report</Link>
-                      <Link to="/upload-vitals" className="block px-4 py-2 hover:bg-green-50 text-gray-700 rounded-lg">Log Vitals</Link>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-          
+          <Link to="/dashboard" className="hover:text-green-600 transition">Dashboard</Link>
+
+          <div
+            className="relative"
+            onMouseEnter={() => setActiveDropdown("upload")}
+            onMouseLeave={() => setActiveDropdown(null)}
+          >
+            <button className="flex items-center gap-1 hover:text-green-600 transition py-4">
+              Upload <ChevronDown size={14} />
+            </button>
+            <AnimatePresence>
+              {activeDropdown === "upload" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full left-0 bg-white shadow-xl rounded-xl border border-gray-100 p-2 w-48 overflow-hidden"
+                >
+                  <Link to="/upload-report" className="block px-4 py-2 hover:bg-green-50 text-gray-700 rounded-lg">Upload Report</Link>
+                  <Link to="/upload-vitals" className="block px-4 py-2 hover:bg-green-50 text-gray-700 rounded-lg">Log Vitals</Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
         </div>
 
         {/* --- Desktop Profile Actions --- */}
@@ -117,10 +116,20 @@ const Navbar = () => {
                 <h4 className="text-xl font-bold text-gray-900">{user?.username}</h4>
                 <p className="text-sm text-gray-500">{user?.email}</p>
               </div>
-              <div className="space-y-2">
-                <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 text-gray-700 transition"><LayoutDashboard size={18} /> Dashboard</Link>
-                <Link to="/profile" className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 text-gray-700 transition"><User size={18} /> Account</Link>
-              </div>
+              <Link to="/" className="text-lg font-medium p-4 hover:bg-gray-50 rounded-xl">Home</Link>
+              <Link to="/about" className="text-lg font-medium p-4 hover:bg-gray-50 rounded-xl">About</Link>
+
+              <div className="h-px bg-gray-100 my-2" />
+              <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-2">Features</p>
+              <Link to="/dashboard" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
+                <LayoutDashboard size={20} /> Dashboard
+              </Link>
+              <Link to="/upload-report" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
+                <FileText size={20} /> Upload Report
+              </Link>
+              <Link to="/upload-vitals" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
+                <HeartPulse size={20} /> Log Vitals
+              </Link>
               <div className="mt-auto pt-6 border-t border-gray-100">
                 <button onClick={handleLogout} className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition font-semibold"><LogOut size={18} /> Sign Out</button>
               </div>
@@ -132,7 +141,7 @@ const Navbar = () => {
       {/* --- Mobile Navigation Menu (FIXED) --- */}
       <AnimatePresence>
         {showMobileMenu && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -153,21 +162,21 @@ const Navbar = () => {
 
             <Link to="/" className="text-lg font-medium p-4 hover:bg-gray-50 rounded-xl">Home</Link>
             <Link to="/about" className="text-lg font-medium p-4 hover:bg-gray-50 rounded-xl">About</Link>
-            
-                <div className="h-px bg-gray-100 my-2" />
-                <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-2">Features</p>
-                <Link to="/dashboard" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
-                  <LayoutDashboard size={20} /> Dashboard
-                </Link>
-                <Link to="/upload-report" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
-                  <FileText size={20} /> Upload Report
-                </Link>
-                <Link to="/upload-vitals" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
-                  <HeartPulse size={20} /> Log Vitals
-                </Link>
+
+            <div className="h-px bg-gray-100 my-2" />
+            <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-2">Features</p>
+            <Link to="/dashboard" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
+              <LayoutDashboard size={20} /> Dashboard
+            </Link>
+            <Link to="/upload-report" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
+              <FileText size={20} /> Upload Report
+            </Link>
+            <Link to="/upload-vitals" className="flex items-center gap-3 text-lg font-medium p-4 hover:bg-green-50 text-gray-700 hover:text-green-700 rounded-xl">
+              <HeartPulse size={20} /> Log Vitals
+            </Link>
             {user && (
               <>
-                
+
                 <div className="h-px bg-gray-100 my-4" />
                 <button onClick={handleLogout} className="flex items-center gap-3 text-lg font-medium p-4 text-red-500 hover:bg-red-50 rounded-xl w-full text-left">
                   <LogOut size={20} /> Logout

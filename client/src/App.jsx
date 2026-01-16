@@ -14,6 +14,8 @@ import ReportRecord from "./pages/ReportRecord";
 import Contact from './pages/Contact';
 
 
+
+
 //components
 import Layout from './components/layoutes/layoutes';
 import About from './components/About';

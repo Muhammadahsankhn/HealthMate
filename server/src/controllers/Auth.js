@@ -20,7 +20,8 @@ exports.register = async (req, res) => {
                 const newUser = await User.create({
                     username,
                     email,
-                    password: hash
+                    password: hash,
+                    createdAt
                 });
                 let token = generateToken(newUser.toObject());
                 return res.status(201).json({

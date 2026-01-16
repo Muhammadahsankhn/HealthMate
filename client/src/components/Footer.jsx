@@ -22,8 +22,8 @@ const Footer = () => {
               Empowering you to understand your health data with the power of AI. Secure, fast, and easy to use.
             </p>
             <div className="flex gap-4">
-              <SocialIcon icon={<Github size={20} />} href="https://github.com/ahsan" />
-              <SocialIcon icon={<Linkedin size={20} />} href="https://linkedin.com/in/ahsan" />
+              <SocialIcon icon={<Github size={20} />} href="https://github.com/muhammadahsankhn" />
+              <SocialIcon icon={<Linkedin size={20} />} href="https://linkedin.com/in/ahsan-khan-a284132a0/" />
               <SocialIcon icon={<Twitter size={20} />} href="#" />
             </div>
           </div>
@@ -35,7 +35,6 @@ const Footer = () => {
               <li><Link to="/dashboard" className="hover:text-green-600 transition">Dashboard</Link></li>
               <li><Link to="/upload-report" className="hover:text-green-600 transition">Upload Report</Link></li>
               <li><Link to="/upload-vitals" className="hover:text-green-600 transition">Track Vitals</Link></li>
-              <li><Link to="/medications" className="hover:text-green-600 transition">Medications</Link></li>
             </ul>
           </div>
 
