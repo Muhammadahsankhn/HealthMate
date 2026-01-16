@@ -21,7 +21,6 @@ exports.register = async (req, res) => {
                     username,
                     email,
                     password: hash,
-                    createdAt
                 });
                 let token = generateToken(newUser.toObject());
                 return res.status(201).json({

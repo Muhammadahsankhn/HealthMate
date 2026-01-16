@@ -4,9 +4,17 @@ const mongoose = require('mongoose');
 
 const PORT = process.env.PORT || 5000;
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/healthMate ')
-  .catch(err => console.error('❌ MongoDB Error:', err));
-
-// Start server
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+// 1. Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDB Connected Successfully');
+    
+    // 2. ONLY Start Server if DB connects
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('MongoDB Connection Error:', err.message);
+    console.error('Check your .env file: Username/Password might be wrong.');
+  });

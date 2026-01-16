@@ -7,7 +7,7 @@ const pdfParse = require('pdf-parse');
 const Tesseract = require("tesseract.js");
 
 // ===============================
-// 📄 Upload Report + AI Analysis
+// Upload Report + AI Analysis
 // ===============================
 exports.uploadReport = async (req, res) => {
   try {
@@ -48,7 +48,7 @@ exports.uploadReport = async (req, res) => {
         // Read file from disk
         const dataBuffer = fs.readFileSync(req.file.path);
 
-        // 🛑 DANGEROUS LINE WRAPPED IN TRY/CATCH
+        //  DANGEROUS LINE WRAPPED IN TRY/CATCH
         try {
           const pdfData = await pdfParse(dataBuffer);
           fileContent = pdfData.text;
@@ -57,7 +57,7 @@ exports.uploadReport = async (req, res) => {
           if (fileContent) fileContent = fileContent.substring(0, 3000);
 
         } catch (pdfErr) {
-          console.warn("⚠️ PDF Parsing Failed (Skipping AI):", pdfErr.message);
+          console.warn("PDF Parsing Failed (Skipping AI):", pdfErr.message);
           fileContent = ""; // Continue without text
         }
 
@@ -79,7 +79,7 @@ exports.uploadReport = async (req, res) => {
         console.error("AI Analysis Failed:", aiErr.message);
       }
     } else {
-      console.log("ℹ️ Skipping AI: Not enough text found.");
+      console.log("Skipping AI: Not enough text found.");
       aiResult.summary = "Could not extract text from this file. Upload image only";
     }
 

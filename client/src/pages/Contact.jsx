@@ -17,7 +17,7 @@ const Contact = () => {
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       )
       .then(
-        (result) => {
+        () => {
           console.log(result.text);
           setStatus('Message sent successfully!');
           e.target.reset();
