@@ -8,7 +8,9 @@ const cors = require('cors');
 
 
 const corsOptions = {
-    origin: '*', 
+    origin: ["http://localhost:5173",                 
+        "https://health-mate-three-iota.vercel.app"   
+    ],
     credentials: true, // Allow cookies to be sent
 };
 const app = express();
