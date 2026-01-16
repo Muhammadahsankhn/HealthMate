@@ -1,48 +1,55 @@
-**HealthMate:** Your Digital Medical Record & AI Assistant
+# HealthMate
+
 HealthMate is a MERN Stack application designed to solve the chaos of managing physical medical records. It provides a secure, digital home for medical reports and uses Google's Gemini AI to make them easy to understand for everyone.
 
+## Problem Statement
 
-**The Real-World Problem:**
-In almost every household, there is at least one patient who needs regular medical care.
-The Struggle: When it's time to visit the doctor, families scramble to find specific reports hidden in thick, disorganized bundles of physical files.
-Lost Information: Critical reports often get lost, misplaced, or forgotten at home, meaning the doctor doesn't have the full history.
-Confusion: Even when found, understanding the complex medical terms in lab reports is difficult for the average person.
+In almost every household, there is at least one patient who requires regular medical care. Traditionally, families manage these records by keeping physical files, which leads to several issues. When it is time to visit a doctor, families often scramble to find specific reports hidden in thick, disorganized bundles. Critical reports can get lost, misplaced, or forgotten at home, leaving the doctor without the patient's full history. Furthermore, even when the reports are available, understanding the complex medical terminology within them is often difficult for the average person.
 
+## The Solution
 
-**Our Solution**
-HealthMate replaces the physical file bundle with a secure, intelligent web platform:
-Digital & Secure: Users upload their reports to the web. No more carrying heavy files or losing papers; everything is accessible instantly from anywhere.
-AI Analyzer: We use Google Gemini AI to read the report and generate a Simple English Summary, so patients understand their condition before meeting the doctor.
-Doctor Assistance: The AI automatically generates a list of Questions to Ask the Doctor, ensuring patients get the most out of their appointment.
-Vitals History: A dedicated feature to log and track daily vitals (Blood Pressure, Sugar, Heart Rate), creating a permanent, searchable history of the patient's health trends.
+HealthMate replaces the physical file bundle with a secure, intelligent web platform that addresses these challenges:
 
+- **Digital & Secure:** Users can upload their reports to the web, making them accessible instantly from anywhere. This eliminates the need to carry heavy files or worry about losing papers.
+- **AI Analyzer:** The application uses Google Gemini AI to read uploaded reports and generate a simple English summary. This ensures patients understand their condition before meeting the doctor.
+- **Doctor Assistance:** The AI automatically generates a list of relevant questions for the patient to ask their doctor, ensuring they get the most out of their appointment.
+- **Vitals History:** A dedicated feature allows users to log and track daily vitals such as blood pressure, sugar levels, and heart rate, creating a permanent, searchable history of health trends.
 
+## Key Features
 
-**Tech Stack**
+- **Smart Report Analysis:** Users can upload a PDF or image, and the system extracts the text to summarize findings using AI.
+- **Instant Clarity:** The system translates complex medical jargon into plain, simple language for better understanding.
+- **Daily Vitals Log:** Users can record weight, blood pressure, and sugar levels to maintain a digital history log for their doctor.
+- **Secure Profile:** A user-specific dashboard ensures that private medical data is only accessible to the account owner.
+- **Cloud Storage:** All reports are stored safely on Cloudinary, ensuring they are never lost.
 
-**Frontend:**
-React.js (Vite)
-Tailwind CSS (Styling)
-Framer Motion (Smooth Animations)
-Axios (API Integration)
+## Tech Stack
 
-**Backend:**
-Node.js & Express.js
-MongoDB & Mongoose (Database)
-JWT (Secure Authentication)
+**Frontend**
+- React.js (Vite)
+- Tailwind CSS (Styling)
+- Framer Motion (Smooth Animations)
+- Axios (API Integration)
 
+**Backend**
+- Node.js & Express.js
+- MongoDB & Mongoose (Database)
+- JWT (Secure Authentication)
 
-**AI & Cloud Services:**
-Google Gemini API: For medical text analysis and simplification.
-Cloudinary: Secure cloud storage for medical documents.
-pdf-parse: To extract text from digital PDF reports for analysis.
+**AI & Cloud Services**
+- **Google Gemini API:** Used for medical text analysis and simplification.
+- **Cloudinary:** Used for secure cloud storage of medical documents.
+- **pdf-parse:** Used to extract text from digital PDF reports for analysis.
 
+## Environment Variables
 
+To run this project locally, you will need to create a .env file in the server directory with the following variables:
 
-
-**Key Features**
-Smart Report Analysis: Upload a PDF or Image. The system extracts the text and uses AI to summarize findings.
-Instant Clarity: Translates medical jargon into plain, simple language.
-Daily Vitals Log: Record weight, BP, and sugar levels to maintain a digital history log for the doctor.
-Secure Profile: User-specific dashboard ensuring private medical data is only accessible to the account owner.
-Cloud Storage: Reports are stored safely on Cloudinary, so they are never lost.
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+GEMINI_API_KEY=your_google_gemini_key
