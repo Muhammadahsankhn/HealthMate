@@ -47,9 +47,30 @@ To run this project locally, you will need to create a .env file in the server d
 
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
+MONGO_URI=mongodb://localhost:27017/healthMate
 JWT_SECRET=your_jwt_secret
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 GEMINI_API_KEY=your_google_gemini_key
+
+
+
+
+
+Clone the repository:
+git clone [https://github.com/muhammadahsankhn/healthmate.git]
+cd healthmate
+
+
+Setup the Backend:
+cd server
+npm install
+npm start
+
+
+
+Setup the Frontend:
+cd client
+npm install
+npm run dev
