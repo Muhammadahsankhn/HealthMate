@@ -7,13 +7,29 @@ const chatRoutes = require("./routes/chatRoute");
 const cors = require('cors');
 
 
+const app = express();
+
+
 const corsOptions = {
     origin: ["http://localhost:5173",                 
         "https://health-mate-three-iota.vercel.app"   
     ],
     credentials: true, // Allow cookies to be sent
 };
-const app = express();
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 
 app.use(cors(corsOptions));
 app.use(express.json());

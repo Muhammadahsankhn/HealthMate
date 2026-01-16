@@ -41,7 +41,7 @@ const Auth = ({ onSuccess }) => {
       }
 
     } catch (error) {
-      console.error("❌ Error during authentication:", error);
+      console.error("Error during authentication:", error);
       toast.error(error.response?.data?.message || "Server error, please try again.");
     }
   };
